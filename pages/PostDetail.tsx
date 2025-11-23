@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { JobPost } from '../types';
@@ -7,7 +6,6 @@ import { AdUnit } from '../components/AdUnit';
 import { Calendar, Download, MapPin, Share2, Printer, Eye, Sparkles, ExternalLink, CheckCircle, AlertTriangle, Bell, Star, ArrowRight, Zap, MessageCircle, Users, BookOpen, FileText, Database, Phone, CheckSquare, PenTool, ClipboardList } from 'lucide-react';
 import { sendMessageToGemini } from '../services/geminiService';
 import { SEOHead } from '../components/SEOHead';
-import { MockTestModal } from '../components/MockTestModal';
 
 export const PostDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,9 +17,6 @@ export const PostDetail: React.FC = () => {
   
   // Live Views State
   const [liveViews, setLiveViews] = useState(0);
-
-  // Mock Test State
-  const [showMockModal, setShowMockModal] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -85,39 +80,6 @@ export const PostDetail: React.FC = () => {
   const serviceMessage = `Hi Sanjay Online Center, I want to fill the form for: *${post.title}*.`;
   const whatsappUrl = `https://wa.me/${serviceNumber}?text=${encodeURIComponent(serviceMessage)}`;
 
-  // Determine Mock Test Content based on Post Title/Category/State
-  let mockTestTitle = "General Knowledge Mock Test";
-  let mockTestColor = "from-indigo-600 to-purple-600";
-  let mockTestTarget = "All Exams";
-  let mockTestRegion = "central";
-  
-  const t = (post.title + (post.subCategory || '')).toLowerCase();
-  const s = (post.state || '').toLowerCase();
-
-  // Determine Language/Region
-  if (s.includes('bengal') || s.includes('wb')) mockTestRegion = 'wb';
-  else if (s.includes('bihar') || s.includes('up') || s.includes('uttar')) mockTestRegion = 'bihar';
-  else if (s.includes('assam')) mockTestRegion = 'assam';
-
-  // Determine Exam Type for styling
-  if (t.includes('ssc')) {
-      mockTestTitle = "SSC CGL/CHSL Mock Test Series";
-      mockTestColor = "from-green-600 to-emerald-600";
-      mockTestTarget = "SSC Exams";
-  } else if (t.includes('railway') || t.includes('rrb') || t.includes('ntpc')) {
-      mockTestTitle = "Railway NTPC & Group D Mock Test";
-      mockTestColor = "from-blue-600 to-cyan-600";
-      mockTestTarget = "Railway Exams";
-  } else if (t.includes('police') || t.includes('constable') || t.includes('si')) {
-      mockTestTitle = "Police Constable & SI Mock Test";
-      mockTestColor = "from-rose-600 to-red-600";
-      mockTestTarget = "Police Exams";
-  } else if (t.includes('tet') || t.includes('teacher') || t.includes('primary')) {
-      mockTestTitle = "TET / CTET Primary Mock Test";
-      mockTestColor = "from-amber-500 to-orange-600";
-      mockTestTarget = "Teaching Exams";
-  }
-
   return (
     <div className="bg-slate-50 min-h-screen pb-12">
       <SEOHead 
@@ -126,9 +88,6 @@ export const PostDetail: React.FC = () => {
         keywords={post.seo?.keywords}
         schema={post.schemaMarkup}
       />
-      
-      {/* Mock Test Modal */}
-      {showMockModal && <MockTestModal title={mockTestTitle} region={mockTestRegion} onClose={() => setShowMockModal(false)} />}
       
       {/* 1. Hero Header */}
       <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-800 text-white pt-8 pb-16 relative overflow-hidden shadow-lg">
@@ -258,32 +217,6 @@ export const PostDetail: React.FC = () => {
                             ))}
                         </ul>
                     </div>
-                </div>
-            </div>
-
-            {/* AUTO INJECTED MOCK TEST BANNER */}
-            <div 
-                className={`rounded-xl p-6 bg-gradient-to-r ${mockTestColor} text-white shadow-lg relative overflow-hidden group hover:scale-[1.01] transition-transform cursor-pointer border-2 border-white/20`}
-                onClick={() => setShowMockModal(true)}
-            >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-white/20 transition-all"></div>
-                <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm animate-bounce">
-                            <PenTool size={28} />
-                        </div>
-                        <div>
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="bg-black/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide">{mockTestTarget}</span>
-                                <span className="bg-yellow-400 text-black px-2 py-0.5 rounded text-[10px] font-bold">FREE</span>
-                            </div>
-                            <h3 className="text-xl font-extrabold leading-tight">{mockTestTitle}</h3>
-                            <p className="text-white/90 text-sm font-medium mt-1">Boost your score! Attempt 50+ Questions now.</p>
-                        </div>
-                    </div>
-                    <button className="bg-white text-slate-900 px-6 py-2.5 rounded-full font-bold shadow-xl hover:bg-slate-50 transition-colors whitespace-nowrap flex items-center gap-2">
-                        Start Test <ArrowRight size={16}/>
-                    </button>
                 </div>
             </div>
 

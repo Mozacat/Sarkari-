@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import { JobCategory, JobPost, QuickLink } from '../types';
 import { getPostsByCategory, ALL_STATES, ALL_CATEGORIES_LIST, getSiteSettings } from '../services/mockData';
 import { AdUnit } from '../components/AdUnit';
-import { MapPin, Star, ArrowRight, Zap, Bell, CheckCircle, Search, Flame, MessageCircle, Send, CheckSquare, Server, Train, Shield, Target, BookOpen, Landmark, Building2, Gavel, Stethoscope, Users, FileText, GraduationCap, Briefcase, Cpu, Hammer, X, ExternalLink, RefreshCw, PenTool } from 'lucide-react';
-import { MockTestCard } from '../components/MockTestCard';
-import { MockTestModal } from '../components/MockTestModal';
+import { MapPin, Star, ArrowRight, Zap, Bell, CheckCircle, Search, Flame, MessageCircle, Send, CheckSquare, Server, Train, Shield, Target, BookOpen, Landmark, Building2, Gavel, Stethoscope, Users, FileText, GraduationCap, Briefcase, Cpu, Hammer, X, ExternalLink, RefreshCw } from 'lucide-react';
 
 // --- Components ---
 
@@ -121,7 +119,7 @@ const QuickAccessSection = ({ links }: { links: QuickLink[] }) => {
 };
 
 const GlobeIcon = ({size, className}: {size:number, className?:string}) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
 );
 const AlertIcon = ({size}: {size:number}) => (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -297,11 +295,6 @@ export const Home: React.FC = () => {
   const [latestJobs, setLatestJobs] = useState<JobPost[]>([]);
   const [quickLinks, setQuickLinks] = useState<QuickLink[]>([]);
   
-  // Mock Test State
-  const [showMockModal, setShowMockModal] = useState(false);
-  const [selectedTest, setSelectedTest] = useState<string>('');
-  const [selectedRegion, setSelectedRegion] = useState<string>('central');
-
   useEffect(() => {
     setResults(getPostsByCategory(JobCategory.RESULT, 8)); // Fetch more results
     setAdmitCards(getPostsByCategory(JobCategory.ADMIT_CARD, 6));
@@ -309,16 +302,8 @@ export const Home: React.FC = () => {
     setQuickLinks(getSiteSettings().quickLinks || []);
   }, []);
 
-  const startMockTest = (title: string, region: string) => {
-      setSelectedTest(title);
-      setSelectedRegion(region);
-      setShowMockModal(true);
-  };
-
   return (
     <div className="animate-in fade-in duration-500 bg-slate-100 min-h-screen pb-12 font-sans">
-      
-      {showMockModal && <MockTestModal title={selectedTest} region={selectedRegion} onClose={() => setShowMockModal(false)} />}
       
       <LiveTicker />
       <HeroSection />
@@ -449,51 +434,6 @@ export const Home: React.FC = () => {
                         <span className="text-sm font-bold text-slate-700 group-hover:text-indigo-800 line-clamp-1">{sector.title}</span>
                     </Link>
                 ))}
-            </div>
-        </div>
-
-        {/* New: Daily Free Mock Tests */}
-        <div className="bg-white rounded-xl shadow-md border border-slate-200 p-6 mb-12 lighting-card">
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-extrabold text-slate-800 flex items-center gap-2">
-                    <div className="bg-rose-100 p-2 rounded-lg text-rose-600"><PenTool size={20} /></div>
-                    Daily Free Mock Tests
-                </h2>
-                <span className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1 rounded-full animate-pulse">New Series Added</span>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <MockTestCard 
-                    title="WBSSC Clerkship" 
-                    subject="General Studies Full Test" 
-                    questions={5} 
-                    time={10} 
-                    type="general" 
-                    onStart={() => startMockTest("WBSSC Clerkship Mock Test", "wb")}
-                />
-                <MockTestCard 
-                    title="Railway NTPC CBT-1" 
-                    subject="Maths & Reasoning" 
-                    questions={5} 
-                    time={10} 
-                    type="railway" 
-                    onStart={() => startMockTest("Railway NTPC CBT-1 Mock Test", "central")}
-                />
-                <MockTestCard 
-                    title="Bihar Police Constable" 
-                    subject="Hindi Language Test" 
-                    questions={5} 
-                    time={10} 
-                    type="police" 
-                    onStart={() => startMockTest("Bihar Police Mock Test", "bihar")}
-                />
-                <MockTestCard 
-                    title="Assam Direct Recruitment" 
-                    subject="General Knowledge (Assamese)" 
-                    questions={5} 
-                    time={10} 
-                    type="general" 
-                    onStart={() => startMockTest("ADRE Mock Test", "assam")}
-                />
             </div>
         </div>
 
